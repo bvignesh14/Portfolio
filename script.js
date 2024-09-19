@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const preloader = document.getElementById('preloader');
   const helloText = document.getElementById('hello-text');
-  const words = ["Hello", "Bonjour", "Ciao", "Olà", "やあ", "Hallå", "Hallo"];
+  const words = ["Hello", "Bonjour", "Ciao", "Olà", "やあ", "Hallå", "Hallo", "Namaskaram", "Vanakkam"];
   let index = 0;
 
   function typeWord(word, callback) {
