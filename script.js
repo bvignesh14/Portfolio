@@ -1,51 +1,96 @@
-function toggleMenu() {
-  const menu = document.querySelector(".menu-links");
-  const icon = document.querySelector(".hamburger-icon");
-  menu.classList.toggle("open");
-  icon.classList.toggle("open");
-}
+document.addEventListener('DOMContentLoaded', function() {
+  const preloader = document.getElementById('preloader');
+  const helloText = document.getElementById('hello-text');
+  const words = ["Hello", "Bonjour", "Ciao", "Olà", "やあ", "Hallå", "Hallo"];
+  let index = 0;
 
-const btn = document.getElementById("modeToggle");
-const btn2 = document.getElementById("modeToggle2");
-const themeIcons = document.querySelectorAll(".icon");
-const currentTheme = localStorage.getItem("theme");
+  function typeWord(word, callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+          helloText.textContent += word[i];
+          i++;
+          if (i === word.length) {
+              clearInterval(interval);
+              setTimeout(callback, 300); // Reduced delay after typing the word
+          }
+      }, 30); // Reduced interval time for faster typing
+  }
 
-if (currentTheme === "dark") {
-  setDarkMode();
-}
+  function cycleWords() {
+      if (index < words.length) {
+          typeWord(words[index], () => {
+              helloText.textContent = '';
+              index++;
+              cycleWords();
+          });
+      } else {
+          setTimeout(() => {
+              preloader.style.opacity = '0';
+              setTimeout(() => {
+                  preloader.style.display = 'none';
+              }, 500); // Reduced fade-out duration
+          }, 500); // Reduced time before fade-out
+      }
+  }
 
-btn.addEventListener("click", function () {
-  setTheme();
-});
+  cycleWords();
 
-btn2.addEventListener("click", function () {
-  setTheme();
-});
+  // Menu toggle function
+  function toggleMenu() {
+      const menu = document.querySelector(".menu-links");
+      const icon = document.querySelector(".hamburger-icon");
+      menu.classList.toggle("open");
+      icon.classList.toggle("open");
+  }
 
-function setTheme() {
-  let currentTheme = document.body.getAttribute("theme");
+  const btn = document.getElementById("modeToggle");
+  const btn2 = document.getElementById("modeToggle2");
+  const themeIcons = document.querySelectorAll(".icon");
+  const currentTheme = localStorage.getItem("theme");
 
   if (currentTheme === "dark") {
-    setLightMode();
-  } else {
-    setDarkMode();
+      setDarkMode();
   }
-}
 
-function setDarkMode() {
-  document.body.setAttribute("theme", "dark");
-  localStorage.setItem("theme", "dark");
-
-  themeIcons.forEach((icon) => {
-    icon.src = icon.getAttribute("src-dark");
+  btn.addEventListener("click", function () {
+      setTheme();
   });
-}
 
-function setLightMode() {
-  document.body.removeAttribute("theme");
-  localStorage.setItem("theme", "light");
-
-  themeIcons.forEach((icon) => {
-    icon.src = icon.getAttribute("src-light");
+  btn2.addEventListener("click", function () {
+      setTheme();
   });
-}
+
+  function setTheme() {
+      let currentTheme = document.body.getAttribute("theme");
+
+      if (currentTheme === "dark") {
+          setLightMode();
+      } else {
+          setDarkMode();
+      }
+  }
+
+  function setDarkMode() {
+      document.body.setAttribute("theme", "dark");
+      localStorage.setItem("theme", "dark");
+
+      themeIcons.forEach((icon) => {
+          icon.src = icon.getAttribute("src-dark");
+      });
+  }
+
+  function setLightMode() {
+      document.body.removeAttribute("theme");
+      localStorage.setItem("theme", "light");
+
+      themeIcons.forEach((icon) => {
+          icon.src = icon.getAttribute("src-light");
+      });
+  }
+
+  // Attach the toggleMenu function to the hamburger icon click event
+  const icon = document.querySelector(".hamburger-icon");
+  if (icon) {
+      icon.addEventListener("click", toggleMenu);
+  }
+});
